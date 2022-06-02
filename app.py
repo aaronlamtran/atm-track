@@ -30,7 +30,7 @@ SWITCH_PW = os.getenv('SWITCH_PW')
 SWITCH_USER = os.getenv('SWITCH_USER')
 
 chrome_options = Options()
-# chrome_options.headless = True
+chrome_options.headless = True
 service = Service(executable_path=CHROME_DRIVER_PATH)
 driver = webdriver.Chrome(options=chrome_options, service=service)
 driver.implicitly_wait(45)
@@ -67,6 +67,7 @@ last_txn = driver.find_element(
     By.XPATH, '//*[@id="ctl00_BodyContent_TerminalList"]/tbody/tr[2]/td[10]').text
 cash = re.sub('\$', "", cash_balance)
 post_one(t_id, int(float(cash)), days_until_load, last_txn)
+email(t_id, int(float(cash)), days_until_load, last_txn)
 results = get_all()
 for db_entry in results:
     print(db_entry)

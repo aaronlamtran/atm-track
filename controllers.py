@@ -14,9 +14,8 @@ conn = psycopg2.connect(f"dbname=atm_track user={DB_USER}")
 cur = conn.cursor()
 
 msg = EmailMessage()
-msg['Subject'] = 'New Transaction'
 msg['From'] = EMAIL_ADDRESS
-msg['To'] = EMAIL_ADDRESS
+msg['To'] = SEND_TO_EMAIL_ADDRESS
 
 
 def get_all():
@@ -27,6 +26,7 @@ def get_all():
 
 def email(t_id, cash, days, last):
     message = f'{t_id}: last transaction {last}. days until reload: {days}. cash: {cash} '
+    msg['Subject'] = f'Transaction {message}'
     msg.set_content(message)
     print(msg)
     server = smtplib.SMTP_SSL('smtp.mail.yahoo.com', 465)
@@ -43,7 +43,6 @@ def post_one(t_id, cash, days, last):
   """,
                 (t_id, cash, days, last))
     conn.commit()
-
 
 
 

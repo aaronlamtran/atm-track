@@ -59,15 +59,16 @@ btn = driver.find_element(
 
 t_id = driver.find_element(
     By.XPATH, '//*[@id="ctl00_BodyContent_TerminalList"]/tbody/tr[2]/td[2]').text
-cash_balance = driver.find_element(
+cash = driver.find_element(
     By.XPATH, '//*[@id="ctl00_BodyContent_TerminalList_ctl02_lblCashBalance"]').text
 days_until_load = driver.find_element(
     By.XPATH, '//*[@id="ctl00_BodyContent_TerminalList_ctl02_lblDaysUntilCashLoad"]').text
 last_txn = driver.find_element(
     By.XPATH, '//*[@id="ctl00_BodyContent_TerminalList"]/tbody/tr[2]/td[10]').text
-cash = re.sub('\$', "", cash_balance)
-post_one(t_id, int(float(cash)), days_until_load, last_txn)
-email(t_id, int(float(cash)), days_until_load, last_txn)
+cash_balance = re.sub('\$', "", cash.replace(",", ""))
+
+post_one(t_id, int(float(cash_balance)), days_until_load, last_txn)
+email(t_id, int(float(cash_balance)), days_until_load, last_txn)
 results = get_all()
 for db_entry in results:
     print(db_entry)

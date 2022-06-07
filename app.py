@@ -54,7 +54,8 @@ def main():
       driver.find_element(By.XPATH, '//*[@id="contentbody"]/div/div[1]').click()
       # agree_btn = driver.find_element(By.XPATH, '//*[@id="ctl00_BodyContent_Agree"]')
       # agree_btn.click()
-    except NoSuchElementException:
+    except NoSuchElementException as err:
+        print('Exception Block: ', err)
         pass
     # javaScript = "document.getElementById('ctl00_BodyContent_Agree').click();"
     # driver.execute_script(javaScript)

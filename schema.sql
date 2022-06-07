@@ -7,7 +7,7 @@ CREATE TABLE "TERMINAL_DATA" (
   "id" serial PRIMARY KEY,
   "createdAt" timestamp not null default CURRENT_DATE,
   "terminalID" varchar,
-  "cashBalance" integer,
+  "cashBalance" integer UNIQUE,
   "daysUntilLoad" integer,
   "lastTransaction" varchar
 );

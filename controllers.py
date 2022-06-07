@@ -10,21 +10,20 @@ SEND_TO_EMAIL_ADDRESS = os.getenv('SEND_TO_EMAIL_ADDRESS')
 EMAIL_ADDRESS = os.getenv('EMAIL_ADDRESS')
 EMAIL_PW = os.getenv('EMAIL_PW')
 
-conn = psycopg2.connect(f"dbname=atm_track user={DB_USER}")
-cur = conn.cursor()
-
-msg = EmailMessage()
-msg['From'] = EMAIL_ADDRESS
-msg['To'] = SEND_TO_EMAIL_ADDRESS
-
 
 def get_all():
+    conn = psycopg2.connect(f"dbname=atm_track user={DB_USER}")
+    cur = conn.cursor()
     cur.execute('SELECT * FROM "TERMINAL_DATA"')
     records = cur.fetchall()
     # print(records)
     return records
 
-def email(t_id, cash, days, last):
+
+def email_one(t_id, cash, days, last):
+    msg = EmailMessage()
+    msg['From'] = EMAIL_ADDRESS
+    msg['To'] = SEND_TO_EMAIL_ADDRESS
     message = f'{t_id}: last transaction {last}. days until reload: {days}. cash: {cash} '
     msg['Subject'] = f'Transaction {message}'
     msg.set_content(message)
@@ -35,7 +34,10 @@ def email(t_id, cash, days, last):
     server.send_message(msg)
     print('email sent')
 
+
 def post_one(t_id, cash, days, last):
+    conn = psycopg2.connect(f"dbname=atm_track user={DB_USER}")
+    cur = conn.cursor()
     cur.execute("""
   INSERT INTO "TERMINAL_DATA"
   ( "terminalID", "cashBalance", "daysUntilLoad", "lastTransaction")
@@ -43,7 +45,6 @@ def post_one(t_id, cash, days, last):
   """,
                 (t_id, cash, days, last))
     conn.commit()
-
 
 
 # if __name__ == '__main__':

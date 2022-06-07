@@ -56,6 +56,8 @@ def main():
     #   # agree_btn.click()
     # except NoSuchElementException:
     #   next()
+    javaScript = "document.getElementById('ctl00_BodyContent_Agree').click();"
+    driver.execute_script(javaScript)
 
     t_id = driver.find_element(
         By.XPATH, '//*[@id="ctl00_BodyContent_TerminalList"]/tbody/tr[2]/td[2]').text

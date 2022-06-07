@@ -50,5 +50,5 @@ def post_one(t_id, cash, days, last):
     conn.commit()
 
 
-if __name__ == '__main__':
-  get_all()
+# if __name__ == '__main__':
+#   get_all()

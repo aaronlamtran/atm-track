@@ -6,13 +6,16 @@ from email.message import EmailMessage
 load_dotenv()
 
 DB_USER = os.getenv('DB_USER')
+DB_PW = os.getenv('DB_PW')
+DB_NAME = os.getenv('DB_NAME')
 SEND_TO_EMAIL_ADDRESS = os.getenv('SEND_TO_EMAIL_ADDRESS')
 EMAIL_ADDRESS = os.getenv('EMAIL_ADDRESS')
 EMAIL_PW = os.getenv('EMAIL_PW')
 
+print(f"dbname=atm_track user={DB_USER} password={DB_PW}")
+conn = psycopg2.connect(f"host=localhost dbname={DB_NAME} user={DB_USER} password={DB_PW}")
 
 def get_all():
-    conn = psycopg2.connect(f"dbname=atm_track user={DB_USER}")
     cur = conn.cursor()
     cur.execute('SELECT * FROM "TERMINAL_DATA"')
     records = cur.fetchall()
@@ -36,7 +39,7 @@ def email_one(t_id, cash, days, last):
 
 
 def post_one(t_id, cash, days, last):
-    conn = psycopg2.connect(f"dbname=atm_track user={DB_USER}")
+    # conn = psycopg2.connect(f"dbname=atm_track user={DB_USER}")
     cur = conn.cursor()
     cur.execute("""
   INSERT INTO "TERMINAL_DATA"
@@ -48,4 +51,4 @@ def post_one(t_id, cash, days, last):
 
 
 # if __name__ == '__main__':
-#   email()
+#   get_all()

@@ -33,7 +33,7 @@ chrome_options = Options()
 chrome_options.headless = True
 service = Service(executable_path=CHROME_DRIVER_PATH)
 driver = webdriver.Chrome(options=chrome_options, service=service)
-driver.implicitly_wait(45)
+driver.implicitly_wait(25)
 def main():
     driver.get(SWITCH_ATM)
 
@@ -50,12 +50,15 @@ def main():
     btn = driver.find_element(
         By.XPATH, '//*[@id="ctl00_BodyContent_LoginButton"]').click()
 
-    # try:
-    #   driver.find_element(By.XPATH, '//*[@id="contentbody"]/div/div[1]').click()
-    #   # agree_btn = driver.find_element(By.XPATH, '//*[@id="ctl00_BodyContent_Agree"]')
-    #   # agree_btn.click()
-    # except NoSuchElementException:
-    #   next()
+    try:
+#      driver.find_element(By.XPATH, '//*[@id="contentbody"]/div/div[1]')
+      agree_btn = driver.find_element(By.XPATH, '//*[@id="ctl00_BodyContent_Agree"]')
+      agree_btn.click()
+    except NoSuchElementException as err:
+        print('Exception Block: ', err)
+        pass
+    # javaScript = "document.getElementById('ctl00_BodyContent_Agree').click();"
+    # driver.execute_script(javaScript)
 
     t_id = driver.find_element(
         By.XPATH, '//*[@id="ctl00_BodyContent_TerminalList"]/tbody/tr[2]/td[2]').text

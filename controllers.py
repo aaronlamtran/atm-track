@@ -13,7 +13,7 @@ EMAIL_ADDRESS = os.getenv('EMAIL_ADDRESS')
 EMAIL_PW = os.getenv('EMAIL_PW')
 
 print(f"dbname=atm_track user={DB_USER} password={DB_PW}")
-conn = psycopg2.connect(f"host=localhost dbname={DB_NAME} user={DB_USER} password={DB_PW}")
+conn = psycopg2.connect(f"dbname={DB_NAME} user={DB_USER} password={DB_PW}")
 
 def get_all():
     cur = conn.cursor()

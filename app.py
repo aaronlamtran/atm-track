@@ -57,8 +57,6 @@ def main():
     except NoSuchElementException as err:
         print('Exception Block: ', err)
         pass
-    # javaScript = "document.getElementById('ctl00_BodyContent_Agree').click();"
-    # driver.execute_script(javaScript)
 
     t_id = driver.find_element(
         By.XPATH, '//*[@id="ctl00_BodyContent_TerminalList"]/tbody/tr[2]/td[2]').text
@@ -69,13 +67,15 @@ def main():
     last_txn = driver.find_element(
         By.XPATH, '//*[@id="ctl00_BodyContent_TerminalList"]/tbody/tr[2]/td[10]').text
     cash_balance = re.sub('\$', "", cash.replace(",", ""))
-
-    post_one(t_id, int(float(cash_balance)), days_until_load, last_txn)
-    email_one(t_id, int(float(cash_balance)), days_until_load, last_txn)
-    results = get_all()
-    for db_entry in results:
-        print(db_entry)
-
+    try:
+        post_one(t_id, int(float(cash_balance)), days_until_load, last_txn)
+        email_one(t_id, int(float(cash_balance)), days_until_load, last_txn)
+        results = get_all()
+        for db_entry in results:
+            print(db_entry)
+    except Exception as err:
+        print('Exception: ', err)
+        driver.quit()
 
     driver.quit()
     executionTime = (time.time() - startTime)

@@ -29,6 +29,7 @@ CHROME_DRIVER_PATH = os.getenv('CHROME_DRIVER_PATH') + "/chromedriver"
 SWITCH_ATM = os.getenv('SWITCH_ATM_PATH')
 SWITCH_PW = os.getenv('SWITCH_PW')
 SWITCH_USER = os.getenv('SWITCH_USER')
+remind_link = os.getenv('REMIND_LINK')
 
 chrome_options = Options()
 chrome_options.headless = True
@@ -45,6 +46,7 @@ def try_remind_me_later():
             print('\n REMINDER TRIGGERED \n')
             remind_txt = driver.find_element(By.XPATH, '//*[@id="ctl00_BodyContent_PasswordExpireMessage"]').text
             remind_me_btn.click()
+            remind_txt += '\n\n' + remind_link + '\n\n' + SWITCH_ATM
             email_reminder(remind_txt)
         pass
     except NoSuchElementException as err:

@@ -17,7 +17,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from dotenv import load_dotenv
-from controllers import email_one, get_all, post_one
+from controllers import email_one, get_all, post_one, email_reminder
 load_dotenv()
 
 
@@ -41,8 +41,11 @@ def try_remind_me_later():
     try:
         remind_me_btn = driver.find_element(
             By.XPATH, '//*[@id="ctl00_BodyContent_BtnDontReset"]')
-        remind_me_btn.click()
-        print('\n REMIND ME LATER BTN NOTIF HERE \n')
+        if remind_me_btn:
+            print('\n REMINDER TRIGGERED \n')
+            remind_txt = driver.find_element(By.XPATH, '//*[@id="ctl00_BodyContent_PasswordExpireMessage"]').text
+            remind_me_btn.click()
+            email_reminder(remind_txt)
         pass
     except NoSuchElementException as err:
         print('Exception Block From try_remind_me_later: ', err)

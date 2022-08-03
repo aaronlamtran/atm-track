@@ -49,6 +49,20 @@ def post_one(t_id, cash, days, last):
                 (t_id, cash, days, last))
     conn.commit()
 
+def email_reminder(ui_msg_txt):
+    msg = EmailMessage()
+    msg['From'] = EMAIL_ADDRESS
+    msg['To'] = SEND_TO_EMAIL_ADDRESS
+    message = ui_msg_txt
+    msg['Subject'] = f'REMINDER!'
+    msg.set_content(message)
+    print(msg)
+    server = smtplib.SMTP_SSL('smtp.mail.yahoo.com', 465)
+    server.ehlo()
+    server.login(EMAIL_ADDRESS, EMAIL_PW)
+    server.send_message(msg)
+    print('email sent')
+
 
 # if __name__ == '__main__':
 #   get_all()

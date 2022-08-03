@@ -65,7 +65,7 @@ def main():
       agree_btn = driver.find_element(By.XPATH, '//*[@id="ctl00_BodyContent_Agree"]')
       agree_btn.click()
     except NoSuchElementException as err:
-        print('Exception Block: ', err)
+        print('Exception Block.. No agree btn: ', err)
         pass
 
     t_id = driver.find_element(

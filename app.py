@@ -5,6 +5,7 @@ import os
 import re
 import webbrowser
 import time
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -34,15 +35,20 @@ chrome_options.headless = True
 service = Service(executable_path=CHROME_DRIVER_PATH)
 driver = webdriver.Chrome(options=chrome_options, service=service)
 driver.implicitly_wait(25)
+
+
 def try_remind_me_later():
     try:
-        remind_me_btn = driver.find_element(By.XPATH, '//*[@id="ctl00_BodyContent_BtnDontReset"]')
+        remind_me_btn = driver.find_element(
+            By.XPATH, '//*[@id="ctl00_BodyContent_BtnDontReset"]')
         remind_me_btn.click()
         print('\n REMIND ME LATER BTN NOTIF HERE \n')
         pass
     except NoSuchElementException as err:
         print('Exception Block From try_remind_me_later: ', err)
         pass
+
+
 def main():
     driver.get(SWITCH_ATM)
 
@@ -60,10 +66,10 @@ def main():
         By.XPATH, '//*[@id="ctl00_BodyContent_LoginButton"]').click()
 
     try:
-#      driver.find_element(By.XPATH, '//*[@id="contentbody"]/div/div[1]')
-      try_remind_me_later()
-      agree_btn = driver.find_element(By.XPATH, '//*[@id="ctl00_BodyContent_Agree"]')
-      agree_btn.click()
+        try_remind_me_later()
+        agree_btn = driver.find_element(
+            By.XPATH, '//*[@id="ctl00_BodyContent_Agree"]')
+        agree_btn.click()
     except NoSuchElementException as err:
         print('Exception Block.. No agree btn: ', err)
         pass
@@ -91,5 +97,6 @@ def main():
     executionTime = (time.time() - startTime)
     print('Execution time in seconds: ' + str(executionTime))
 
+
 if __name__ == '__main__':
-  main()
+    main()

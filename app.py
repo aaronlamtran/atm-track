@@ -44,6 +44,7 @@ def try_remind_me_later():
             By.XPATH, '//*[@id="ctl00_BodyContent_BtnDontReset"]')
         if remind_me_btn:
             print('\n REMINDER TRIGGERED \n')
+            print('\n CHANGE ENV AFTER SUCCESS \n')
             remind_txt = driver.find_element(By.XPATH, '//*[@id="ctl00_BodyContent_PasswordExpireMessage"]').text
             remind_me_btn.click()
             remind_txt += '\n\n' + remind_link + '\n\n' + SWITCH_ATM
@@ -51,6 +52,15 @@ def try_remind_me_later():
         pass
     except NoSuchElementException as err:
         print('Exception Block From try_remind_me_later: ', err)
+        pass
+
+def try_agree():
+    try:
+        agree_btn = driver.find_element(
+            By.XPATH, '//*[@id="ctl00_BodyContent_Agree"]')
+        agree_btn.click()
+    except NoSuchElementException as err:
+        print('Exception Block.. No agree btn: ', err)
         pass
 
 
@@ -70,14 +80,9 @@ def main():
     btn = driver.find_element(
         By.XPATH, '//*[@id="ctl00_BodyContent_LoginButton"]').click()
 
-    try:
-        try_remind_me_later()
-        agree_btn = driver.find_element(
-            By.XPATH, '//*[@id="ctl00_BodyContent_Agree"]')
-        agree_btn.click()
-    except NoSuchElementException as err:
-        print('Exception Block.. No agree btn: ', err)
-        pass
+    try_remind_me_later()
+
+    try_agree()
 
     t_id = driver.find_element(
         By.XPATH, '//*[@id="ctl00_BodyContent_TerminalList"]/tbody/tr[2]/td[2]').text
@@ -88,6 +93,7 @@ def main():
     last_txn = driver.find_element(
         By.XPATH, '//*[@id="ctl00_BodyContent_TerminalList"]/tbody/tr[2]/td[10]').text
     cash_balance = re.sub('\$', "", cash.replace(",", ""))
+
     try:
         post_one(t_id, int(float(cash_balance)), days_until_load, last_txn)
         email_one(t_id, int(float(cash_balance)), days_until_load, last_txn)

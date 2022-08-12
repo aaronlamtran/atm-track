@@ -5,6 +5,7 @@ import os
 import re
 import webbrowser
 import time
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -16,7 +17,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from dotenv import load_dotenv
-from controllers import email_one, get_all, post_one
+from controllers import email_one, get_all, post_one, email_reminder
 load_dotenv()
 
 
@@ -28,21 +29,41 @@ CHROME_DRIVER_PATH = os.getenv('CHROME_DRIVER_PATH') + "/chromedriver"
 SWITCH_ATM = os.getenv('SWITCH_ATM_PATH')
 SWITCH_PW = os.getenv('SWITCH_PW')
 SWITCH_USER = os.getenv('SWITCH_USER')
+remind_link = os.getenv('REMIND_LINK')
 
 chrome_options = Options()
 chrome_options.headless = True
 service = Service(executable_path=CHROME_DRIVER_PATH)
 driver = webdriver.Chrome(options=chrome_options, service=service)
 driver.implicitly_wait(25)
+
+
 def try_remind_me_later():
     try:
-        remind_me_btn = driver.find_element(By.XPATH, '//*[@id="ctl00_BodyContent_BtnDontReset"]')
-        remind_me_btn.click()
-        print('\n REMIND ME LATER BTN NOTIF HERE \n')
+        remind_me_btn = driver.find_element(
+            By.XPATH, '//*[@id="ctl00_BodyContent_BtnDontReset"]')
+        if remind_me_btn:
+            print('\n REMINDER TRIGGERED \n')
+            print('\n CHANGE ENV AFTER SUCCESS \n')
+            remind_txt = driver.find_element(By.XPATH, '//*[@id="ctl00_BodyContent_PasswordExpireMessage"]').text
+            remind_me_btn.click()
+            remind_txt += '\n\n' + remind_link + '\n\n' + SWITCH_ATM
+            email_reminder(remind_txt)
         pass
     except NoSuchElementException as err:
         print('Exception Block From try_remind_me_later: ', err)
         pass
+
+def try_agree():
+    try:
+        agree_btn = driver.find_element(
+            By.XPATH, '//*[@id="ctl00_BodyContent_Agree"]')
+        agree_btn.click()
+    except NoSuchElementException as err:
+        print('Exception Block.. No agree btn: ', err)
+        pass
+
+
 def main():
     driver.get(SWITCH_ATM)
 
@@ -59,14 +80,9 @@ def main():
     btn = driver.find_element(
         By.XPATH, '//*[@id="ctl00_BodyContent_LoginButton"]').click()
 
-    try:
-#      driver.find_element(By.XPATH, '//*[@id="contentbody"]/div/div[1]')
-      try_remind_me_later()
-      agree_btn = driver.find_element(By.XPATH, '//*[@id="ctl00_BodyContent_Agree"]')
-      agree_btn.click()
-    except NoSuchElementException as err:
-        print('Exception Block.. No agree btn: ', err)
-        pass
+    try_remind_me_later()
+
+    try_agree()
 
     t_id = driver.find_element(
         By.XPATH, '//*[@id="ctl00_BodyContent_TerminalList"]/tbody/tr[2]/td[2]').text
@@ -77,6 +93,7 @@ def main():
     last_txn = driver.find_element(
         By.XPATH, '//*[@id="ctl00_BodyContent_TerminalList"]/tbody/tr[2]/td[10]').text
     cash_balance = re.sub('\$', "", cash.replace(",", ""))
+
     try:
         post_one(t_id, int(float(cash_balance)), days_until_load, last_txn)
         email_one(t_id, int(float(cash_balance)), days_until_load, last_txn)
@@ -91,5 +108,6 @@ def main():
     executionTime = (time.time() - startTime)
     print('Execution time in seconds: ' + str(executionTime))
 
+
 if __name__ == '__main__':
-  main()
+    main()

@@ -20,6 +20,8 @@ def get_all():
     cur.execute('SELECT * FROM "TERMINAL_DATA"')
     records = cur.fetchall()
     # print(records)
+    for record in records:
+        print(record)
     return records
 
 
@@ -64,5 +66,5 @@ def email_reminder(ui_msg_txt):
     print('email sent')
 
 
-# if __name__ == '__main__':
-#   get_all()
+if __name__ == '__main__':
+  get_all()

@@ -32,7 +32,7 @@ SWITCH_USER = os.getenv('SWITCH_USER')
 remind_link = os.getenv('REMIND_LINK')
 
 chrome_options = Options()
-chrome_options.headless = True
+# chrome_options.headless = True
 service = Service(executable_path=CHROME_DRIVER_PATH)
 driver = webdriver.Chrome(options=chrome_options, service=service)
 driver.implicitly_wait(25)
@@ -63,8 +63,7 @@ def try_agree():
         print('Exception Block.. No agree btn: ', err)
         pass
 
-
-def main():
+def try_login():
     driver.get(SWITCH_ATM)
 
     user_field = driver.find_element(
@@ -80,9 +79,32 @@ def main():
     btn = driver.find_element(
         By.XPATH, '//*[@id="ctl00_BodyContent_LoginButton"]').click()
 
+def try_get_report():
+    # click reports : xpath //*[@id="SCTopMenu"]/li[3]/a
+    reports_btn = driver.find_element(By.XPATH, '//*[@id="SCTopMenu"]/li[3]/a').click()
+    # click monthly statement: //*[@id="contentbody"]/table/tbody/tr[1]/td[4]/ul/li[1]/a
+    monthly_statement = driver.find_element(By.XPATH, '//*[@id="contentbody"]/table/tbody/tr[1]/td[4]/ul/li[1]/a').click()
+    # click terminal_drop_btn : xpath //*[@id="ctl00_BodyContent_ReportViewer_ReportViewerTerminalID_searchableList_searchButton"]
+    # input_field = driver.find_element(By.XPATH,'//*[@id="ctl00_BodyContent_ReportViewer_ReportViewerTerminalID_searchableList_textBox"]')
+    # terminal_string = 'NH097675 - Presto Processing'
+    # input_field.send_keys(terminal_string)
+    terminal_drop_btn = driver.find_element(By.XPATH, '//*[@id="ctl00_BodyContent_ReportViewer_ReportViewerTerminalID_searchableList_searchButton"]').click()
+    # terminal_btn = driver.find_element(By.XPATH, '//*[@id="ul_results"]/li[1]/a').click()
+    time.sleep(10)
+    terminal_btn = driver.find_element(By.XPATH, '//*[@id="ul_results"]/li[1]').click()
+    pass
+
+def main():
+    try_login()
+
+    try_get_report()
+    print('pausing')
+    time.sleep(400)
     try_remind_me_later()
 
     try_agree()
+
+
 
     t_id = driver.find_element(
         By.XPATH, '//*[@id="ctl00_BodyContent_TerminalList"]/tbody/tr[2]/td[2]').text

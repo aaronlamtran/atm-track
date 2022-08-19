@@ -12,10 +12,10 @@ done
 
 if [[ -z $DBUSER ]] ; then
   echo "need user"
-  exit
+  exit 0
   elif [[ -z $DBNAME ]] ; then
   echo "need dbname"
-  exit
+  exit 0
 else
   psql -U "$DBUSER" -d "$DBNAME" -a -f schema.sql
 fi

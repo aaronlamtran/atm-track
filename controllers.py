@@ -17,7 +17,7 @@ conn = psycopg2.connect(f"host=localhost dbname={DB_NAME} user={DB_USER} passwor
 
 def get_all():
     cur = conn.cursor()
-    cur.execute('SELECT * FROM "TERMINAL_DATA"')
+    cur.execute('SELECT * FROM "TERMINAL_DATA" ORDER BY id ASC')
     records = cur.fetchall()
     # print(records)
     for record in records:

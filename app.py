@@ -17,7 +17,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from dotenv import load_dotenv
-from controllers import email_one, get_all, post_one, email_reminder
+from controllers import email_one, get_all, post_one, email_reminder, is_last_balance_same
 load_dotenv()
 
 
@@ -95,6 +95,8 @@ def main():
     cash_balance = re.sub('\$', "", cash.replace(",", ""))
 
     try:
+        # balance_changed = not is_last_balance_same(int(float(cash_balance)))
+        # if balance_changed:
         post_one(t_id, int(float(cash_balance)), days_until_load, last_txn)
         email_one(t_id, int(float(cash_balance)), days_until_load, last_txn)
         results = get_all()

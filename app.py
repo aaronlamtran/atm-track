@@ -17,7 +17,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from dotenv import load_dotenv
-from controllers import email_one, get_all, post_one, email_reminder
+from controllers import email_one, get_all, post_one, email_reminder, is_last_balance_same
 load_dotenv()
 
 
@@ -52,6 +52,7 @@ def try_remind_me_later():
         pass
     except NoSuchElementException as err:
         print('Exception Block From try_remind_me_later: ', err)
+        print('\nStill working...\n')
         pass
 
 def try_agree():
@@ -61,6 +62,7 @@ def try_agree():
         agree_btn.click()
     except NoSuchElementException as err:
         print('Exception Block.. No agree btn: ', err)
+        print('\nStill working...\n')
         pass
 
 
@@ -95,6 +97,8 @@ def main():
     cash_balance = re.sub('\$', "", cash.replace(",", ""))
 
     try:
+        # balance_changed = not is_last_balance_same(int(float(cash_balance)))
+        # if balance_changed:
         post_one(t_id, int(float(cash_balance)), days_until_load, last_txn)
         email_one(t_id, int(float(cash_balance)), days_until_load, last_txn)
         results = get_all()

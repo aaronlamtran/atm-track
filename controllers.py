@@ -17,9 +17,12 @@ conn = psycopg2.connect(f"host=localhost dbname={DB_NAME} user={DB_USER} passwor
 
 def get_all():
     cur = conn.cursor()
-    cur.execute('SELECT * FROM "TERMINAL_DATA"')
+    cur.execute('SELECT * FROM "TERMINAL_DATA" ORDER BY id ASC')
     records = cur.fetchall()
     # print(records)
+    # for record in records:
+        # print(record)
+    conn.close()
     return records
 
 
@@ -38,6 +41,15 @@ def email_one(t_id, cash, days, last):
     print('email sent')
 
 
+def is_last_balance_same(cash):
+    cur = conn.cursor()
+    cur.execute('SELECT "cashBalance" from "TERMINAL_DATA" ORDER BY id DESC')
+    records = cur.fetchone()
+    for record in records:
+        # print(record, cash)
+        # print(record == cash )
+        return record == cash
+
 def post_one(t_id, cash, days, last):
     # conn = psycopg2.connect(f"dbname=atm_track user={DB_USER}")
     cur = conn.cursor()
@@ -48,6 +60,7 @@ def post_one(t_id, cash, days, last):
   """,
                 (t_id, cash, days, last))
     conn.commit()
+
 
 def email_reminder(ui_msg_txt):
     msg = EmailMessage()
@@ -64,5 +77,5 @@ def email_reminder(ui_msg_txt):
     print('email sent')
 
 
-# if __name__ == '__main__':
-#   get_all()
+if __name__ == '__main__':
+    get_all()

@@ -20,8 +20,9 @@ def get_all():
     cur.execute('SELECT * FROM "TERMINAL_DATA" ORDER BY id ASC')
     records = cur.fetchall()
     # print(records)
-    for record in records:
-        print(record)
+    # for record in records:
+        # print(record)
+    conn.close()
     return records
 
 
@@ -77,4 +78,4 @@ def email_reminder(ui_msg_txt):
 
 
 if __name__ == '__main__':
-    check_last_balance()
+    get_all()

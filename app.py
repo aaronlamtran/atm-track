@@ -52,6 +52,7 @@ def try_remind_me_later():
         pass
     except NoSuchElementException as err:
         print('Exception Block From try_remind_me_later: ', err)
+        print('\nStill working...\n')
         pass
 
 def try_agree():
@@ -61,6 +62,7 @@ def try_agree():
         agree_btn.click()
     except NoSuchElementException as err:
         print('Exception Block.. No agree btn: ', err)
+        print('\nStill working...\n')
         pass
 
 

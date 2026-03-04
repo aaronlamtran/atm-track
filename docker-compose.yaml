@@ -1,10 +1,22 @@
 services:
-  database:
-    image: postgres
+  postgres:
+    image: postgres:16
+    container_name: atm_postgres
+    environment:
+      POSTGRES_DB: atm_track
+      POSTGRES_USER: aarontran
+      POSTGRES_PASSWORD: "CHANGE_ME"
     ports:
       - "5432:5432"
-    restart: always
-    environment:
-      POSTGRES_USER:
-      POSTGRES_PASSWORD:
-      POSTGRES_DB:
+    volumes:
+      - atm_pgdata:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aarontran -d atm_track"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  atm_pgdata:

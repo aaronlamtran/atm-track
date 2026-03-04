@@ -106,6 +106,8 @@ skywriter==0.0.7
 slack-sdk==3.17.0
 sn3218==1.2.7
 sniffio==1.2.0
+selenium
+python-dotenv
 sortedcontainers==2.4.0
 soupsieve==2.2.1
 spidev==3.5

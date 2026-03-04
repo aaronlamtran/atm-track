@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_DB: atm_track
       POSTGRES_USER: aarontran
-      POSTGRES_PASSWORD: "CHANGE_ME"
+      POSTGRES_PASSWORD: "${DB_PW}"
     ports:
       - "5432:5432"
     volumes:
